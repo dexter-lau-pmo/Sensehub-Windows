@@ -1,0 +1,12 @@
+[Unit]
+Description=Sensor hub script
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/admin/Sensor-Hub/bin/python /home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Face-Recognition/clear_folder.py
+WorkingDirectory=/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Face-Recognition
+User=admin
+
+[Install]
+WantedBy=multi-user.target

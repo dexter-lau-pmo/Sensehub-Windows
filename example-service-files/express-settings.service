@@ -1,0 +1,12 @@
+[Unit]
+Description=Sensor hub script
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/nodejs /home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/express-server.js
+WorkingDirectory=/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage
+Restart=always
+User=admin
+
+[Install]
+WantedBy=default.target

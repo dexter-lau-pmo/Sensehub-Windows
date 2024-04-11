@@ -1,0 +1,12 @@
+[Unit]
+Description=Sensor hub script
+After=network.target
+
+[Service]
+ExecStart=/home/admin/Sensor-Hub/bin/python3 /home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Pi-Sensor/pi_sensor.py
+WorkingDirectory=/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Pi-Sensor/
+Restart=always
+User=admin
+
+[Install]
+WantedBy=default.target
