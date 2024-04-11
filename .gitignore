@@ -1,0 +1,11 @@
+Face-Recognition/_pycache__
+Face-Recognition/__pycache__/camera.cpython-311.pyc
+Face-Recognition/__pycache__/ftp_uploader.cpython-311.pyc
+Face-Recognition/__pycache__/mqtt_client.cpython-311.pyc
+Face-Recognition/__pycache__/recognition_logic.cpython-311.pyc
+Pi-Sensor/__pycache__/mqtt_client.cpython-311.pyc
+Face-Recognition/dataset/
+Face-Recognition/snapshots/
+SettingsPage/GCS_credentials.json
+SettingsPage/sndgo-internship-13ee71c61735-backup.json
+test_tools/

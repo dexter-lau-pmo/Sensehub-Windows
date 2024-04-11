@@ -6,10 +6,11 @@ class MQTTClient:
         self.connect()
 
     def on_publish(self, client, userdata, mid):
-        print("Message published: {mid}")
+        print("Message published: ", mid)
 
     def publish(self, json_object):
         self.client.publish(self.topic, json.dumps(json_object))
+        print(json.dumps(json_object))
 
     def reconnect(self):
         self.client.disconnect()

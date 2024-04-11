@@ -37,8 +37,12 @@ class PiSensor:
         temp_P = self.sense.get_temperature_from_pressure()
         
         if temp_H > 30 or temp_P > 30:
-            self.mqtt_client.publish_message("Temperature threshold has exceeded!")
-    
+        payload = {
+            "temperature" : self.sense.get_temperature_from_humidity()
+        }
+        # Publish MQTT
+        self.mqtt_client.publish_json(payload)
+            
 if __name__ == "__main__":
     app = PiSensor()
     app.run()

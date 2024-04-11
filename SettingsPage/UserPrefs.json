@@ -5,7 +5,7 @@
     "snapshotFolder": "/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Face-Recognition/snapshots/"
   },
   "mqttSettings": {
-    "broker": "35.198.213.246",
+    "broker": "35.240.151.148",
     "port": 1883
   },
   "rtspSettings": {

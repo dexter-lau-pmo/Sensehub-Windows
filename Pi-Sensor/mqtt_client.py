@@ -17,14 +17,29 @@ class MQTTClient:
 
         self.client = mqtt.Client()
         self.client.on_publish = self.on_publish
+        self.client.on_message = self.on_message
+        self.client.on_connect = self.on_connect
         self.client.connect(broker , port, 60)
         self.client.loop_start()
 
     def on_publish(self, client, userdata, mid):
         print(f"Message published: {mid}")
 
+    def on_message(self, client, userdata, msg):
+        print(msg.topic+" "+str(msg.payload))
+
     def publish_json(self, json_object):
         self.client.publish(self.topic, json.dumps(json_object))
         
     def publish_message(self, message):
         self.client.publish(self.topic, message)
+        
+    def on_connect(self, client, userdata, flags, rc):
+        if rc == 0:
+            print("Connected to MQTT broker")
+            #added subscribe
+            self.client.subscribe("#")
+            print("Subscribed to /1234/Robot001/cmd")
+
+        else: 
+            print("Failed to connect to MQTT broker")

@@ -29,6 +29,7 @@ class FTPUploader:
         
         print("Upload complete")
         url = blob.public_url
+        print (url)
         #url = blob.generate_signed_url(expiration=3600, method='GET')
 
         return url
