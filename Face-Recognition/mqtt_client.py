@@ -4,20 +4,24 @@ import json
 class MQTTClient:
     def __init__(self):
         self.connect()
+        self.client.loop_start()
+
 
     def on_publish(self, client, userdata, mid):
         print("Message published: ", mid)
 
     def publish(self, json_object):
-        self.client.publish(self.topic, json.dumps(json_object))
+        ret = self.client.publish(self.topic, json.dumps(json_object))
         print(json.dumps(json_object))
-
+        print("Paho ret " , ret)
+        
     def reconnect(self):
         self.client.disconnect()
         self.connect()
 
     def is_connection_active(self):
         return self.client.is_connected()
+        
 
     def connect(self):
         # Specify the path to your JSON file

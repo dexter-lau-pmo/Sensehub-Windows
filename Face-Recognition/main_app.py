@@ -48,7 +48,7 @@ class MainApp:
                 local_img_path = folder_path + file_name
                 thumbnail_path = file_name[:-3] + "jpg"
                 local_thumbnail_path = self.data['filePaths']['snapshotFolder'] + thumbnail_path
-                self.camera.record_video(10, local_img_path, local_thumbnail_path)
+                self.camera.record_video(3, local_img_path, local_thumbnail_path) #Video length is reduced
                 file_name = "alerts/" + file_name
                 gcp_thumbnail_path = "alerts/" + thumbnail_path
                
