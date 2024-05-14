@@ -11,16 +11,15 @@ class MQTTClient:
             # Load the JSON data from the file
             data = json.load(file)
         
-        broker = data['mqttSettings']['broker']
-        port = data['mqttSettings']['port']
+        self.broker = data['mqttSettings']['broker']
+        self.port = data['mqttSettings']['port']
         self.topic = "/1234/EnvironmentalSensor001/attrs"
 
         self.client = mqtt.Client()
         self.client.on_publish = self.on_publish
         self.client.on_message = self.on_message
         self.client.on_connect = self.on_connect
-        self.client.connect(broker , port, 60)
-        self.client.loop_start()
+
 
     def on_publish(self, client, userdata, mid):
         print(f"Message published: {mid}")
@@ -33,12 +32,17 @@ class MQTTClient:
         
     def publish_message(self, message):
         self.client.publish(self.topic, message)
+        print(message)
+        
+    def connect(self):
+        self.client.connect(self.broker , self.port, 60)
+        self.client.loop_start()
         
     def on_connect(self, client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT broker")
             #added subscribe
-            self.client.subscribe("#")
+            self.client.subscribe("/1234/Robot001/cmd")
             print("Subscribed to /1234/Robot001/cmd")
 
         else: 
