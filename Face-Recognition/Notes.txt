@@ -1,0 +1,5 @@
+Windows:
+python3 -m venv SenseHub
+.\SenseHub\Scripts\activate
+
+
