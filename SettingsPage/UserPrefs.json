@@ -1,8 +1,8 @@
 {
   "filePaths": {
-    "cascade": "/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Face-Recognition/haarcascade_frontalface_default.xml",
-    "trainer": "/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Face-Recognition/trainer/trainer.yml",
-    "snapshotFolder": "/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/Face-Recognition/snapshots/"
+    "cascade": "./haarcascade_frontalface_default.xml",
+    "trainer": "./trainer/trainer.yml",
+    "snapshotFolder": "./snapshots/"
   },
   "mqttSettings": {
     "broker": "35.240.151.148",

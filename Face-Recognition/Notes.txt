@@ -1,5 +1,6 @@
 Windows:
 python3 -m venv SenseHub
 .\SenseHub\Scripts\activate
+python11 main_app.py
 
 

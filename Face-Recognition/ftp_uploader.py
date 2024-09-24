@@ -4,7 +4,7 @@ import json
 
 class FTPUploader:
     def upload_file(self, local_file_path, file_name, isVideo=True):
-        credential_json_path = "/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/GCS_credentials.json"
+        credential_json_path = "../SettingsPage/GCS_credentials.json"
         
         # Create credentials from the service account JSON file
         creds = service_account.Credentials.from_service_account_file(credential_json_path)

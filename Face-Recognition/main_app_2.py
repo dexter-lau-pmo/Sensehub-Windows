@@ -4,12 +4,19 @@ from camera import Camera
 import cv2
 import json
 from datetime import datetime
+import os
 
 class MainApp2:
     def __init__(self):
         # Specify the path to your JSON file
-        json_file_path = '/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/UserPrefs.json'
+        #json_file_path = '/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/UserPrefs.json'
 
+        # Construct the path relative to the script's directory, use absolute path if does not work     
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        json_file_path = os.path.normpath(os.path.join(script_dir, '..', 'SettingsPage', 'UserPrefs.json'))
+        
+        
+        
         # Open the JSON file for reading
         with open(json_file_path, 'r') as file:
             # Load the JSON data from the file

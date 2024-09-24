@@ -5,12 +5,20 @@ from recognition_logic import FaceRecognitionLogic
 import cv2
 import json
 from datetime import datetime
+import os
 
 class MainApp:
     def __init__(self):
         # Specify the path to your JSON file
-        json_file_path = '/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/UserPrefs.json'
-
+        #json_file_path = '/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/UserPrefs.json'
+        
+        # Construct the path relative to the script's directory, use absolute path if does not work     
+        #script_dir = os.path.dirname(os.path.abspath(__file__))
+        #json_file_path = os.path.normpath(os.path.join(script_dir, '..', 'SettingsPage', 'UserPrefs.json'))
+        #print(json_file_path)
+        
+        json_file_path = '../SettingsPage/UserPrefs.json'  
+        
         # Open the JSON file for reading
         with open(json_file_path, 'r') as file:
             # Load the JSON data from the file
@@ -33,12 +41,13 @@ class MainApp:
                 break
             
             # Regardless of how fast the frame rate is, only one frame will be sampled per second
-            if self.frame_count % self.camera.cam.get(cv2.CAP_PROP_FPS) != 0:
+            if self.frame_count % self.camera.cam.get(cv2.CAP_PROP_FPS) != 0: #Skip loop if not a full second
                 continue
             
             minW, minH = self.camera.get_min_face_size()
-            json_object = self.recognizer.identify_faces(gray, minW, minH)
-            is_tenth_minute = ((self.frame_count/self.camera.cam.get(cv2.CAP_PROP_FPS))*5 == 300)
+            json_object = self.recognizer.identify_faces(gray, minW, minH)# Returns basic JSON message add find shirt color afterwards in seperate classifier, using img instead of gray
+            
+            #is_tenth_minute = ((self.frame_count/self.camera.cam.get(cv2.CAP_PROP_FPS))*5 == 300)
             
             # human is detected
             if json_object is not None:
@@ -58,16 +67,6 @@ class MainApp:
                 json_object['imagepath'] = gcp_thumbnail_url
                 self.mqtt_client.publish(json_object)
             
-            #mandatory 10 minutes rec
-            #elif is_tenth_minute:
-             #   print("5 min rec")
-              #  self.frame_count = 0
-               # timestamp = datetime.timestamp(datetime.now())
-               # timestamp_str = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H_%M_%S')
-                #file_name = timestamp_str + ".avi"
-                #folder_path = self.data['filePaths']['alertsFolder']
-                #local_img_path = folder_path + file_name
-                #self.camera.record_video(10, local_img_path)
                 
             
 

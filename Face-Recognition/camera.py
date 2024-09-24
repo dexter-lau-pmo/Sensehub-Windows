@@ -12,7 +12,7 @@ class Camera:
     # Designed to be a blocking function because app serves no purpose without an rtsp connection
     def connect(self):
         # Specify the path to your JSON file
-        json_file_path = '/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/UserPrefs.json'
+        json_file_path = '../SettingsPage/UserPrefs.json'
 
         while True:
             try:
@@ -28,6 +28,7 @@ class Camera:
                 encoded_password = quote(password)
                 # RTSP stream URL with encoded password
                 rtsp_url = f'rtsp://{user}:{encoded_password}@{rtspAddress}'
+                print(rtsp_url)
                 self.cam = cv2.VideoCapture(rtsp_url)
                 self.set_properties()
                 print("RTSP Connection successful")
