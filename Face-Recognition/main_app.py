@@ -45,7 +45,7 @@ class MainApp:
                 continue
             
             minW, minH = self.camera.get_min_face_size()
-            json_object = self.recognizer.identify_faces(gray, minW, minH)# Returns basic JSON message add find shirt color afterwards in seperate classifier, using img instead of gray
+            json_object = self.recognizer.identify_faces(gray, img, minW, minH)# Returns basic JSON message add find shirt color afterwards in seperate classifier, using img instead of gray
             
             #is_tenth_minute = ((self.frame_count/self.camera.cam.get(cv2.CAP_PROP_FPS))*5 == 300)
             

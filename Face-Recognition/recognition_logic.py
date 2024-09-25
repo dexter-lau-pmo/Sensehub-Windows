@@ -3,6 +3,8 @@ import json
 import os
 import logging
 from datetime import datetime
+from shatsu import Shatsu
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +36,7 @@ class FaceRecognitionLogic:
         self.faceCascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
         self.profileCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
 
-    def identify_faces(self, gray_img, minW, minH):
+    def identify_faces(self, gray_img, img, minW, minH):
         # Detect frontal faces
         frontal_faces = self.faceCascade.detectMultiScale(
             gray_img,
@@ -54,6 +56,7 @@ class FaceRecognitionLogic:
         all_faces = list(frontal_faces) + list(profile_faces)  # Combine both detections
         message = None
 
+        shatsu_obj = Shatsu("")
         if len(all_faces) > 0:
             timestamp = datetime.timestamp(datetime.now())
             timestamp_str = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H_%M_%S')
@@ -68,7 +71,10 @@ class FaceRecognitionLogic:
                 if distance < 60:  # Low distance means high confidence
                     names[-1] = self.names[id]
 
+            color = shatsu_obj.detect(img , x, y, w, h)
+
             logging.info(f"Identified faces: {names} with distances: {distance}")
+            logging.info(f"Identified color: {color} ")
 
             # JSONify
             message = {
