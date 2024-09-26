@@ -10,6 +10,8 @@ from shatsu import Shatsu
 logging.basicConfig(level=logging.INFO)
 
 id_to_names_file = "./name_to_id.json"
+trainer_file = './trainer/trainer.yml'
+haarcascade_file = './haarcascade_frontalface_default.xml'
 
 class FaceRecognitionLogic:
     def __init__(self):
@@ -28,12 +30,12 @@ class FaceRecognitionLogic:
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
 
         try:
-            self.recognizer.read('./trainer/trainer.yml')
+            self.recognizer.read(trainer_file)
         except Exception as e:
             logging.error(f"Failed to load the recognizer model: {e}")
             raise
 
-        self.faceCascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
+        self.faceCascade = cv2.CascadeClassifier(haarcascade_file)
         self.profileCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
 
     def identify_faces(self, gray_img, img, minW, minH):
@@ -78,11 +80,12 @@ class FaceRecognitionLogic:
 
             # JSONify
             message = {
-                "names": names,
+                "names": names[-1], #Insert last name
                 "timestamp": timestamp_str,
                 "filename": file_name,
                 "imagepath": "/" + file_name,
-                "confidence": "{0}%".format((1.0 - (distance / 130)) * 100)
+                "confidence": "{0}%".format((1.0 - (distance / 130)) * 100),
+                "color": color
             }
 
         return message

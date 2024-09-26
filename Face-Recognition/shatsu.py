@@ -91,8 +91,8 @@ class Shatsu(object):
                 shirt_region = img[shirt_y:min(shirt_y + shirt_h, img.shape[0]), shirt_x:min(shirt_x + shirt_w, img.shape[1])]
                 
                 # Optionally visualize the shirt region
-                cv2.imshow('Shirt Region', shirt_region)
-                cv2.waitKey(0)
+                #cv2.imshow('Shirt Region', shirt_region)
+                #cv2.waitKey(0)
 
                 avg_color = self.average_color(shirt_region)
                 # Correct BGR to RGB conversion
@@ -140,7 +140,7 @@ class Shatsu(object):
             closest_color = self.rgb_to_color_name([int(avg_color[2]), int(avg_color[1]), int(avg_color[0])])
             return closest_color  # Return the color name
 
-        return "None"  # Return None if no valid shirt region is found
+        return "Unknown"  # Return None if no valid shirt region is found
 
 
 

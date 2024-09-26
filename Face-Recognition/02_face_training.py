@@ -63,8 +63,9 @@ def getImagesAndLabels(path):
     
     return faceSamples, ids
 
-print("\n[INFO] Training faces. It will take a few seconds. Wait ...")
+print("Loading training data")
 faces, ids = getImagesAndLabels(path)
+print("\n[INFO] Training faces. It will take a few seconds. Wait ...")
 recognizer.train(faces, np.array(ids))
 
 # Save the model into trainer.yml
