@@ -2,6 +2,7 @@ import cv2
 import json
 import time
 from urllib.parse import quote
+import constants
 
 class Camera:
     def __init__(self):
@@ -12,7 +13,7 @@ class Camera:
     # Designed to be a blocking function because app serves no purpose without an rtsp connection
     def connect(self):
         # Specify the path to your JSON file
-        json_file_path = '../SettingsPage/UserPrefs.json'
+        json_file_path = constants.settings_page_file
 
         while True:
             try:
@@ -38,10 +39,25 @@ class Camera:
                 print("Attempting to reconnect in 5 seconds...")
                 time.sleep(5)
 
+
+    #Read in next frame from RTSP
     def read_frame(self):
-        ret, img = self.cam.read()
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        return img, gray
+        for attempt in range(3):  # Try reading up to 3 times before giving up
+            ret, img = self.cam.read()
+            if ret and img is not None:
+                try:
+                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    return img, gray
+                except cv2.error as e:
+                    print(f"Error processing frame: {e}")
+                    continue  # Skip to the next iteration
+            else:
+                print("Failed to read frame from camera.")
+        
+        # If failed to read after retries
+        print("Invalid Frame after multiple attempts")
+        return None, None
+
         
     def release(self):
         self.cam.release()

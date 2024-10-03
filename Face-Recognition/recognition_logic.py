@@ -4,18 +4,19 @@ import os
 import logging
 from datetime import datetime
 from shatsu import Shatsu
-
+import constants
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
-id_to_names_file = "./name_to_id.json"
-trainer_file = './trainer/trainer.yml'
-haarcascade_file = './haarcascade_frontalface_default.xml'
+id_to_names_file = constants.id_to_names_file
+trainer_file = constants.trainer_file
+haarcascade_file = constants.haarcascade_file
+settings_page_file = constants.settings_page_file
 
 class FaceRecognitionLogic:
     def __init__(self):
-        json_file_path = '../SettingsPage/UserPrefs.json'
+        json_file_path = settings_page_file
         logging.info(f"Loading preferences from {json_file_path}")
 
         # Open the JSON file for reading

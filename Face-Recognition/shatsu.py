@@ -2,11 +2,13 @@ import os
 import logging
 import numpy as np
 import cv2
+import constants as constants
+
 
 class Shatsu(object):
     def __init__(self, img_path):
         self.img_path = img_path
-        self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+        self.face_cascade = cv2.CascadeClassifier(constants.haarcascade_file_alt) #Assign haarcascade_file_alt file path as base face classifier
 
     def compress(self, img):
         Z = img.reshape((-1, 3))

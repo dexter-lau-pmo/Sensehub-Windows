@@ -6,6 +6,11 @@ import cv2
 import json
 from datetime import datetime
 import os
+import time
+import constants
+
+trainer_file = constants.trainer_file
+id_to_names_file = constants.id_to_names_file
 
 class MainApp:
     def __init__(self):
@@ -33,6 +38,13 @@ class MainApp:
     def run(self):
         while True:
             img, gray = self.camera.read_frame()
+
+            #Error handling
+            if img is None or gray is None:
+                print("Invalid Frame")
+                time.sleep(5)
+                continue  # Skip iteration if no valid frame
+
             
             self.frame_count += 1
             
@@ -67,8 +79,15 @@ class MainApp:
                 json_object['imagepath'] = gcp_thumbnail_url
                 self.mqtt_client.publish(json_object)
             
-                
-            
+            #Recogniser update
+            #Stop recognising to download new trainer if Flag is raised by MQTT
+            if self.mqtt_client.update_trainer == True and self.mqtt_client.url != "":
+                #File avaliable for download
+                print("Start download of new trainer file")
+                self.ftp_uploader.download_file(self.mqtt_client.url, trainer_file)
+                print("Start download of new json file")
+                self.ftp_uploader.download_file(self.mqtt_client.url_json, id_to_names_file)
+                self.mqtt_client.update_trainer = False
 
         print("\n[INFO] Exiting Program and cleanup stuff")
         self.camera.release()

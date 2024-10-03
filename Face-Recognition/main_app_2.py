@@ -5,6 +5,7 @@ import cv2
 import json
 from datetime import datetime
 import os
+import constants
 
 class MainApp2:
     def __init__(self):
@@ -12,9 +13,9 @@ class MainApp2:
         #json_file_path = '/home/admin/Pi-Sensor-Hub-with-Facial-Recognition/SettingsPage/UserPrefs.json'
 
         # Construct the path relative to the script's directory, use absolute path if does not work     
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        json_file_path = os.path.normpath(os.path.join(script_dir, '..', 'SettingsPage', 'UserPrefs.json'))
-        
+        #script_dir = os.path.dirname(os.path.abspath(__file__))
+        #json_file_path = os.path.normpath(os.path.join(script_dir, '..', 'SettingsPage', 'UserPrefs.json'))
+        json_file_path = constants.settings_page_file
         
         
         # Open the JSON file for reading
