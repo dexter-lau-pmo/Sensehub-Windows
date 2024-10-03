@@ -22,7 +22,7 @@ class MainApp:
         #json_file_path = os.path.normpath(os.path.join(script_dir, '..', 'SettingsPage', 'UserPrefs.json'))
         #print(json_file_path)
         
-        json_file_path = '../SettingsPage/UserPrefs.json'  
+        json_file_path = constants.settings_page_file #'../SettingsPage/UserPrefs.json'  
         
         # Open the JSON file for reading
         with open(json_file_path, 'r') as file:
