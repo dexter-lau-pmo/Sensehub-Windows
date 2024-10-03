@@ -54,12 +54,13 @@ message ={
     "json": json_url
 }
 
+client.client.subscribe("/download/response")
 client.custom_topic_publish(message, custom_topic)
 
 print("Mqtt msessage sent")
-
+print("\n")
 # Sleep for 8 seconds
-time.sleep(8)
+time.sleep(40)
 
 # Optionally stop the client loop (if needed)
 client.client.loop_stop()

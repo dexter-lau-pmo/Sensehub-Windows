@@ -84,10 +84,12 @@ class MainApp:
             if self.mqtt_client.update_trainer == True and self.mqtt_client.url != "":
                 #File avaliable for download
                 print("Start download of new trainer file")
+                self.mqtt_client.custom_topic_publish("\n\n\nDownload started...\n\n\n", "/download/response")
                 self.ftp_uploader.download_file(self.mqtt_client.url, trainer_file)
                 print("Start download of new json file")
                 self.ftp_uploader.download_file(self.mqtt_client.url_json, id_to_names_file)
                 self.mqtt_client.update_trainer = False
+                self.mqtt_client.custom_topic_publish("\n\n\nDownload successful\n\n\n", "/download/response")
 
         print("\n[INFO] Exiting Program and cleanup stuff")
         self.camera.release()

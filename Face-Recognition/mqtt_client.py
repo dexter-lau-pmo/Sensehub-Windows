@@ -3,7 +3,7 @@ import json
 import os
 import constants
 
-camer_id_topic = "/1234/Camera001/attrs"
+camer_id_topic = constants.camer_id_topic #"/1234/Camera001/attrs"
 
 class MQTTClient:
     def __init__(self):
