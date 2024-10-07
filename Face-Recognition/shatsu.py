@@ -3,6 +3,7 @@ import logging
 import numpy as np
 import cv2
 import constants as constants
+from collections import Counter
 
 
 class Shatsu(object):
@@ -21,12 +22,38 @@ class Shatsu(object):
         res2 = res.reshape((img.shape))
         return res2
 
+
+ 
+    #Median color
     def average_color(self, img):
+        #print("IMG: ")
+        #print(img)
         return np.median(img, axis=(0, 1))  # Use median instead of average
+
+    #Find the mode - most common color in region
+    def most_common_color(self, img):
+
+        # Convert each pixel in the image to a color name
+        height, width, _ = img.shape
+        color_names = []
+        
+        for row in range(height):
+            for col in range(width):
+                bgr = img[row, col]  #OpenCV formats in BGR instead of RGB
+                rgb = bgr[::-1]    # Get RGB value of the pixel
+                color_name = self.rgb_to_color_name(rgb)
+                color_names.append(color_name)
+
+        # Calculate the mode (most common color name)
+        color_counter = Counter(color_names)
+        most_common_color_detected = color_counter.most_common(1)[0][0]  # Get the most frequent color name
+
+        return most_common_color_detected
 
 
     def rgb_to_color_name(self, rgb):
         # Simple color name mapping based on RGB values
+        #Full list with all permutations of 0,128,255 must be added, or certain color such as purple are overly favoured
         colors = {
             'black': [0, 0, 0],
             'white': [255, 255, 255],
@@ -37,18 +64,36 @@ class Shatsu(object):
             'cyan': [0, 255, 255],
             'magenta': [255, 0, 255],
             'gray': [128, 128, 128],
+            'dark_gray': [128, 128, 0],
+            'light_gray': [128, 255, 255],
+            'dark_red': [128, 0, 0],
+            'light_red': [255, 128, 128],
+            'dark_green': [0, 128, 0],
+            'light_green': [128, 255, 128],
+            'dark_blue': [0, 0, 128],
+            'light_blue': [128, 128, 255],
+            'dark_yellow': [128, 128, 0],
+            'light_yellow': [255, 255, 128],
             'orange': [255, 165, 0],
-            'purple': [128, 0, 128]
+            'purple': [128, 0, 128],
+            'light_cyan': [128, 255, 255],
+            'dark_cyan': [0, 128, 128],
+            'light_magenta': [255, 128, 255],
+            'dark_magenta': [128, 0, 128]
         }
 
         # Find the closest color
         min_diff = float('inf')
         closest_color = None
         for color_name, color_rgb in colors.items():
-            diff = np.linalg.norm(np.array(rgb) - np.array(color_rgb))
+            diff = np.linalg.norm(np.array(rgb) - np.array(color_rgb)) #Eucledian distance
+            #diff = np.sum(np.abs(np.array(rgb) - np.array(color_rgb)))  #Nominal distance
+
             if diff < min_diff:
                 min_diff = diff
                 closest_color = color_name
+
+        #print("RGB: " , rgb , "closest color: " , closest_color)
 
         return closest_color
 
@@ -97,9 +142,14 @@ class Shatsu(object):
                 #cv2.waitKey(0)
 
                 avg_color = self.average_color(shirt_region)
+                
                 # Correct BGR to RGB conversion
                 closest_color = self.rgb_to_color_name([int(avg_color[2]), int(avg_color[1]), int(avg_color[0])])
                 print(f"Average color of the shirt in image '{self.img_path}': R={int(avg_color[2])}, G={int(avg_color[1])}, B={int(avg_color[0])} - Color: {closest_color}")
+                
+                #Alternate better way of measuring color
+                most_common_color_detected = self.most_common_color(shirt_region)
+                print("Most common color detected : " , most_common_color_detected)
 
                 # Draw rectangle around the shirt
                 cv2.rectangle(img, (shirt_x, shirt_y), (shirt_x + shirt_w, shirt_y + shirt_h), (255, 0, 0), 4)
@@ -136,10 +186,16 @@ class Shatsu(object):
         # Check if shirt_region has valid dimensions
         if shirt_y < img.shape[0] and shirt_x < img.shape[1]:
             shirt_region = img[shirt_y:min(shirt_y + shirt_h, img.shape[0]), shirt_x:min(shirt_x + shirt_w, img.shape[1])]
-            avg_color = self.average_color(shirt_region)
 
-            # Correct BGR to RGB conversion
-            closest_color = self.rgb_to_color_name([int(avg_color[2]), int(avg_color[1]), int(avg_color[0])])
+            # Median color
+            #avg_color = self.average_color(shirt_region)
+            #closest_color = self.rgb_to_color_name([int(avg_color[2]), int(avg_color[1]), int(avg_color[0])])
+
+            # Mode color
+            most_common_color_detected = self.most_common_color(shirt_region)
+            print("Most common color detected : " , most_common_color_detected)
+            closest_color = most_common_color_detected
+
             return closest_color  # Return the color name
 
         return "Unknown"  # Return None if no valid shirt region is found

@@ -40,21 +40,37 @@ class FaceRecognitionLogic:
         self.profileCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
 
     def identify_faces(self, gray_img, img, minW, minH):
+        frontal_faces = []
+        profile_faces = []
         # Detect frontal faces
-        frontal_faces = self.faceCascade.detectMultiScale(
+        frontal_faces , rejectLevels, levelWeights = self.faceCascade.detectMultiScale3(
             gray_img,
             scaleFactor=1.2,
             minNeighbors=5,
             minSize=(int(minW), int(minH)),
+            outputRejectLevels = 1
         )
+        if len(frontal_faces)>0:
+            print("Fontal Face: ")
+            print("Faces: ", frontal_faces)
+            print("rejectLevels: ", rejectLevels)
+            print("levelWeights: ", levelWeights)
 
         # Detect profile faces
-        profile_faces = self.profileCascade.detectMultiScale(
+        profile_faces, rejectLevels, levelWeights= self.profileCascade.detectMultiScale3(
             gray_img,
             scaleFactor=1.2,
             minNeighbors=5,
             minSize=(int(minW), int(minH)),
+            outputRejectLevels = 1
         )
+
+        if len(profile_faces)>0:
+            print("")
+            print("Profile Face: ")
+            print("Faces: ", profile_faces)
+            print("rejectLevels: ", rejectLevels)
+            print("levelWeights: ", levelWeights)
 
         all_faces = list(frontal_faces) + list(profile_faces)  # Combine both detections
         message = None
@@ -66,17 +82,28 @@ class FaceRecognitionLogic:
             file_name = f"{timestamp_str}.mp4"
             file_path = os.path.join(self.data['filePaths']['snapshotFolder'], file_name)
             names = []
-            
+            distance = 10000 #Set high inital distance, to select face with lowest distance
+           
+            names.append("Unknown")
             for (x, y, w, h) in all_faces:
-                id, distance = self.recognizer.predict(gray_img[y:y+h, x:x+w])
-                names.append("Unknown")
-                
-                if distance < 60:  # Low distance means high confidence
-                    names[-1] = self.names[id]
+                #id, distance = self.recognizer.predict(gray_img[y:y+h, x:x+w])
+                #names.append("Unknown") 
+                curr_id, curr_distance = self.recognizer.predict(gray_img[y:y+h, x:x+w])
+
+                print("Curr Id, distance : " , curr_id , "  ,  " , curr_distance)
+
+                if curr_distance < distance: #If current face is the most accurate, use it as the face detected
+                    id = curr_id
+                    distance = curr_distance
+
+            if distance < 75:  # Low distance means high confidence
+                names[-1] = self.names[id] #Get name from JSON
+            else: # if confidence is too low(?)
+                names[-1] = "Unknown" 
 
             color = shatsu_obj.detect(img , x, y, w, h)
 
-            logging.info(f"Identified faces: {names} with distances: {distance}")
+            logging.info(f"Identified {len(names)} faces: {names} with distances: {distance}")
             logging.info(f"Identified color: {color} ")
 
             # JSONify
@@ -85,7 +112,7 @@ class FaceRecognitionLogic:
                 "timestamp": timestamp_str,
                 "filename": file_name,
                 "imagepath": "/" + file_name,
-                "confidence": "{0}%".format((1.0 - (distance / 130)) * 100),
+                "confidence": "{0}%".format((1.0 - (distance / 250)) * 100),
                 "color": color
             }
 
