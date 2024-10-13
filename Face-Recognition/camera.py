@@ -62,7 +62,7 @@ class Camera:
     def release(self):
         self.cam.release()
 
-    def record_video(self, duration, file_path, first_frame_path):
+    def record_video(self, duration, file_path, first_frame_path, thumnail_img=None):
         if not (self.is_connection_active()):
             self.reconnect()
             return
@@ -89,8 +89,13 @@ class Camera:
             out.write(resize_frame)
             
             if first_run:
-                cv2.imwrite(first_frame_path, resize_frame)
-                
+                if thumnail_img is None: #Thumbnail to supplied to function
+                    cv2.imwrite(first_frame_path, resize_frame)
+                else: #thumnail_img is suppied
+                    print("Use supplied thumbnail")
+                    resize_frame = cv2.resize(thumnail_img,(self.desired_width, self.desired_height))
+                    cv2.imwrite(first_frame_path, resize_frame)
+                    
             first_run = False
         
         out.release()

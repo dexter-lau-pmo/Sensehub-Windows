@@ -69,7 +69,7 @@ class MainApp:
                 local_img_path = folder_path + file_name
                 thumbnail_path = file_name[:-3] + "jpg"
                 local_thumbnail_path = self.data['filePaths']['snapshotFolder'] + thumbnail_path
-                self.camera.record_video(1 , local_img_path, local_thumbnail_path) #Video length is further reduced
+                self.camera.record_video(1 , local_img_path, local_thumbnail_path , img) #Video length is further reduced # Added img to supply thumbnail image
                 file_name = "alerts/" + file_name
                 gcp_thumbnail_path = "alerts/" + thumbnail_path
                
@@ -78,6 +78,7 @@ class MainApp:
                 json_object['mediaURL'] = side_effect_url
                 json_object['imagepath'] = gcp_thumbnail_url
                 self.mqtt_client.publish(json_object)
+                time.sleep(1)
             
             #Recogniser update
             #Stop recognising to download new trainer if Flag is raised by MQTT

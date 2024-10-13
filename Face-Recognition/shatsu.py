@@ -188,13 +188,13 @@ class Shatsu(object):
             shirt_region = img[shirt_y:min(shirt_y + shirt_h, img.shape[0]), shirt_x:min(shirt_x + shirt_w, img.shape[1])]
 
             # Median color
-            #avg_color = self.average_color(shirt_region)
-            #closest_color = self.rgb_to_color_name([int(avg_color[2]), int(avg_color[1]), int(avg_color[0])])
+            avg_color = self.average_color(shirt_region)
+            closest_color = self.rgb_to_color_name([int(avg_color[2]), int(avg_color[1]), int(avg_color[0])])
 
             # Mode color
-            most_common_color_detected = self.most_common_color(shirt_region)
-            print("Most common color detected : " , most_common_color_detected)
-            closest_color = most_common_color_detected
+            #most_common_color_detected = self.most_common_color(shirt_region)
+            #print("Most common color detected : " , most_common_color_detected)
+            #closest_color = most_common_color_detected
 
             return closest_color  # Return the color name
 

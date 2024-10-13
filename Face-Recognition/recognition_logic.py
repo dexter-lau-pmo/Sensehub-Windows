@@ -96,7 +96,7 @@ class FaceRecognitionLogic:
                     id = curr_id
                     distance = curr_distance
 
-            if distance < 75:  # Low distance means high confidence
+            if distance < 110:  # Low distance means high confidence
                 names[-1] = self.names[id] #Get name from JSON
             else: # if confidence is too low(?)
                 names[-1] = "Unknown" 
